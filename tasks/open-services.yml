@@ -1,0 +1,52 @@
+---
+- name: Open redis up for remote connections
+  become: true
+  lineinfile:
+    path: /etc/redis/redis.conf
+    regexp: "^bind"
+    line: bind 0.0.0.0
+
+- name: Restart redis service
+  become: true
+  systemd:
+    name: redis
+    state: restarted
+
+- name: Open mongodb up for remote connections
+  become: true
+  lineinfile:
+    path: /etc/mongod.conf
+    regexp: "^  bindIp"
+    line: "  bindIp: 0.0.0.0"
+
+- name: Restart mongodb service
+  become: true
+  service:
+    name: mongod
+    state: restarted
+
+- name: Open mysql for remote connections
+  become: true
+  lineinfile:
+    path: /etc/mysql/mysql.conf.d/mysqld.cnf
+    regexp: "^bind-address"
+    line: "bind-address\t= 0.0.0.0"
+
+- name: Restart MySQL service
+  become: true
+  service:
+    name: mysql
+    state: restarted
+
+- name: Open postgresql for remote connections
+  become: true
+  lineinfile:
+    path: "/etc/postgresql/{{ psql_version }}/main/postgresql.conf"
+    regexp: "^#listen_addresses"
+    line: "listen_addresses = '*'"
+
+- name: Restart Postgres service
+  become: true
+  service:
+    name: postgresql
+    state: restarted

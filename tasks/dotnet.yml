@@ -1,0 +1,28 @@
+---
+- name: Add Microsoft signature
+  become: true
+  apt_key:
+    url: https://packages.microsoft.com/keys/microsoft.asc
+    state: present
+
+- name: Add Microsoft to download list
+  become: true
+  lineinfile:
+    path: /etc/apt/sources.list.d/dotnetdev.list
+    state: present
+    create: yes
+
+    line: "deb [arch=amd64] https://packages.microsoft.com/ubuntu/{{ ubuntu_version }}/prod {{ ubuntu_codename }} main"
+
+- name: Apt Update again
+  become: true
+  apt:
+    update_cache: yes
+
+- name: Install DotNet SDK
+  become: true
+  apt:
+    state: latest
+    name:
+      - apt-transport-https
+      - "dotnet-sdk-{{ dotnet_version }}"

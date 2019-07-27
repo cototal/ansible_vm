@@ -24,7 +24,7 @@
   apt:
     name:
       - postgresql-common
-      - postgresql-10
+      - "postgresql-{{ psql_version }}"
       - python-psycopg2
       - libpq-dev
     state: latest

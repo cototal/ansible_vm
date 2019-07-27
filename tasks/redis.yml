@@ -1,0 +1,95 @@
+---
+- name: Extract redis source
+  unarchive:
+    src: http://download.redis.io/redis-stable.tar.gz
+    dest: /tmp
+    remote_src: yes
+
+- name: Make from redis source
+  make:
+    chdir: /tmp/redis-stable
+
+- name: Ensure redis was built correctly
+  make:
+    target: test
+    chdir: /tmp/redis-stable
+
+- name: Make install redis
+  become: true
+  make:
+    target: install
+    chdir: /tmp/redis-stable
+
+- name: Make configuration directory for redis
+  become: true
+  file:
+    state: directory
+    path: /etc/redis
+
+- name: Copy default configuration
+  become: true
+  copy:
+    src: /tmp/redis-stable/redis.conf
+    dest: /etc/redis/redis.conf
+    remote_src: yes
+
+- name: Set supervisor to systemd
+  become: true
+  lineinfile:
+    path: /etc/redis/redis.conf
+    regexp: "^supervised"
+    line: supervised systemd
+
+- name: Specify data directory
+  become: true
+  lineinfile:
+    path: /etc/redis/redis.conf
+    regexp: "^dir"
+    line: dir /var/lib/redis
+
+- name: Setup redis service config
+  become: true
+  copy:
+    src: "./templates/redis.service"
+    dest: /etc/systemd/system/redis.service
+
+- name: Create redis group
+  become: true
+  group:
+    name: redis
+    state: present
+
+- name: Create redis user
+  become: true
+  user:
+    name: redis
+    create_home: no
+    system: yes
+    group: redis
+
+- name: Create redis data directory
+  become: true
+  file:
+    state: directory
+    path: /var/lib/redis
+    group: redis
+    owner: redis
+    mode: 0770
+
+- name: Start redis service
+  become: true
+  systemd:
+    name: redis
+    state: started
+
+- name: Run redis service on restart
+  become: true
+  systemd:
+    name: redis
+    enabled: yes
+
+- name: Install redis CLI
+  become: true
+  apt:
+    name: redis-tools
+    state: latest

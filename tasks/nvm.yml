@@ -1,0 +1,56 @@
+---
+- name: Check for NVM script
+  stat:
+    path: ~/.nvm/nvm.sh
+  register: nvm_script
+
+- name: Get NVM install script
+  get_url:
+    url: "https://raw.githubusercontent.com/creationix/nvm/{{ nvm_version }}/install.sh"
+    dest: ~/tmp/nvm-install.sh
+  when: not nvm_script.stat.exists
+
+- name: Make NVM script executable
+  file:
+    path: ~/tmp/nvm-install.sh
+    mode: "+x"
+  when: not nvm_script.stat.exists
+
+- name: Run NVM install
+  command: ~/tmp/nvm-install.sh
+  when: not nvm_script.stat.exists
+
+- name: Remove NVM_DIR blocks from .bashrc (we move them to the top)
+  lineinfile:
+    path: ~/.bashrc
+    state: absent
+    regexp: "NVM_DIR"
+  when: not nvm_script.stat.exists
+
+- name: Insert NVM config
+  blockinfile:
+    path: ~/.bashrc
+    marker: "# {mark} NVM CONFIG"
+    insertbefore: If not running interactively
+    block: |
+      export NVM_DIR="$HOME/.nvm"
+      [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
+      [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
+
+- name: Get NVM versions
+  shell: "source {{ nvm_path }} && nvm ls"
+  register: nvm_nodes
+  args:
+    executable: /bin/bash
+
+- name: Install NVM Node
+  shell: "source {{ nvm_path }} && nvm install {{ node_current_version }}"
+  when: "not nvm_nodes.stdout is search('->\\s+' + node_current_version)"
+  args:
+    executable: /bin/bash
+
+- name: Set default node version
+  shell: "source {{ nvm_path }} && nvm alias default {{ node_current_version }}"
+  when: "not nvm_nodes.stdout is search('->\\s+' + node_current_version)"
+  args:
+    executable: /bin/bash

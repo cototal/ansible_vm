@@ -17,5 +17,17 @@
     - import_tasks: "./tasks/php.yml"
     - import_tasks: "./tasks/composer.yml"
     - import_tasks: "./tasks/node.yml"
+    - import_tasks: "./tasks/nvm.yml"
+    - import_tasks: "./tasks/dotnet.yml"
     - import_tasks: "./tasks/mysql.yml"
     - import_tasks: "./tasks/postgres.yml"
+    - import_tasks: "./tasks/mongo.yml"
+    #region Redis
+    - name: Check for redis config
+      stat:
+        path: /etc/redis/redis.conf
+      register: redis_conf
+    - import_tasks: ./tasks/redis.yml
+      when: not redis_conf.stat.exists
+    #endregion Redis
+    - import_tasks: "./tasks/open-services.yml"

@@ -1,0 +1,47 @@
+---
+- name: Check source lists for MongoDB
+  stat:
+    path: "/etc/apt/sources.list.d/mongodb-org-{{ mongodb_version }}.list"
+  register: mongo_source
+
+- name: Add MongoDB apt key
+  become: true
+  apt_key:
+    keyserver: hkp://keyserver.ubuntu.com
+    id: 9DA31620334BD75D9DCB49F368818C72E52529D4
+    state: present
+  when: not mongo_source.stat.exists
+
+- name: Add MongodB to source list
+  become: true
+  lineinfile:
+    path: "/etc/apt/sources.list.d/mongodb-org-{{ mongodb_version }}.list"
+    state: present
+    create: yes
+    line: "deb [ arch=amd64,arm64 ] https://repo.mongodb.org/apt/ubuntu {{ ubuntu_codename }}/mongodb-org/{{ mongodb_version }} multiverse"
+  when: not mongo_source.stat.exists
+
+- name: Apt Update again
+  become: true
+  apt:
+    update_cache: yes
+  when: not mongo_source.stat.exists
+
+- name: Install MongoDB
+  become: true
+  apt:
+    name: mongodb-org
+    state: latest
+  when: not mongo_source.stat.exists
+
+- name: Start MongoDB
+  become: true
+  service:
+    name: mongod
+    state: started
+
+- name: Enable MongoDB to start on boot
+  become: true
+  service:
+    name: mongod
+    enabled: yes
