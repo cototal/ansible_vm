@@ -1,0 +1,19 @@
+---
+- name: Check for SSH key
+  stat:
+    path: ~/.ssh/id_rsa
+  register: ssh_key
+
+- name: Generate SSH key
+  user:
+    name: "{{ username }}"
+    generate_ssh_key: yes
+    ssh_key_bits: 4096
+    ssh_key_file: "~/.ssh/id_rsa"
+    ssh_key_comment: "{{ pubkey_comment }}"
+  when: ssh_key.stat.exists == False
+
+- name: Wait for SSH key to be added to GitHub account
+  pause:
+    prompt: Add the public key to GitHub
+  when: ssh_key.stat.exists == False

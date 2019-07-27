@@ -1,0 +1,47 @@
+---
+# python-mysqldb is required for ansible modules
+- name: Install MySQL
+  become: true
+  apt:
+    state: latest
+    name:
+      - mysql-server
+      - mysql-client
+      - libmysqlclient-dev
+      - python-mysqldb
+
+# The rest of the tasks are similar to mysql_secure_installation
+- name: Check if root password is set
+  command: "mysql -u root -p'{{ mysql_root_pass }}' -e 'SELECT 1'"
+  ignore_errors: yes
+  register: mysql_root_response
+
+- name: Set MySQL root password
+  become: true
+  mysql_user:
+    name: root
+    password: "{{ mysql_root_pass }}"
+    host: "{{ item }}"
+  with_items:
+    - "::1"
+    - "127.0.0.1"
+    - "localhost"
+  when: mysql_root_response.rc == 1
+
+- name: Remove test database
+  mysql_db:
+    login_user: root
+    login_password: "{{ mysql_root_pass }}"
+    name: test
+    state: absent
+
+- name: Remove anonymous users
+  mysql_user:
+    login_user: root
+    login_password: "{{ mysql_root_pass }}"
+    name: ""
+    state: absent
+    host_all: yes
+
+- name: Remove remote root access
+  command: "mysql -u root -p{{ mysql_root_pass }} -e \"DELETE FROM mysql.user WHERE User='root' AND Host NOT IN ('localhost', '127.0.0.1', '::1');\""

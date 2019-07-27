@@ -1,0 +1,47 @@
+---
+- name: Ensure samba package is installed
+  become: true
+  apt:
+    name:
+      - samba
+- name: Set up user authentication
+  become: true
+  blockinfile:
+    path: /etc/samba/smb.conf
+    marker: "# {mark} USER AUTHENTICATION"
+    insertafter: "^#+ Authentication"
+    block: |
+      security = user
+      username map = /etc/samba/smbusers
+
+# This was the only shell command I tried that seemed to work, I think passing newlines was a problem
+- name: Set samba user password
+  become: true
+  shell: "(echo '{{ ssh_pass }}'; echo '{{ ssh_pass }}') | smbpasswd -s -a {{ username }}"
+
+- name: Setup user map
+  become: true
+  lineinfile:
+    path: /etc/samba/smbusers
+    state: present
+    create: yes
+    line: "{{ username }} = \"{{ username }}\""
+
+- name: Define Share
+  become: true
+  blockinfile:
+    path: /etc/samba/smb.conf
+    marker: "# {mark} SHARE DEFINITION"
+    insertafter: "^#=+ Share Definitions"
+    block: |
+      [homes]
+      comment = Home Directories
+      browseable = yes
+      valid users = %S
+      writable = yes
+
+- name: Restart Samba
+  become: true
+  service:
+    name: smbd
+    state: restarted

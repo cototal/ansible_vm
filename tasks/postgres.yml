@@ -1,0 +1,45 @@
+---
+- name: Add Postgres download list
+  become: true
+  lineinfile:
+    path: /etc/apt/sources.list.d/pgdg.list
+    state: present
+    create: yes
+    line: "deb http://apt.postgresql.org/pub/repos/apt/ {{ ubuntu_codename }}-pgdg main"
+
+- name: Add Postgres signature from keyserver
+  become: true
+  apt_key:
+    url: http://apt.postgresql.org/pub/repos/apt/ACCC4CF8.asc
+    state: present
+
+- name: Apt Update again
+  become: true
+  apt:
+    update_cache: yes
+
+# psycopg2 is required for postgres modules
+- name: Install Postgres
+  become: true
+  apt:
+    name:
+      - postgresql-common
+      - postgresql-10
+      - python-psycopg2
+      - libpq-dev
+    state: latest
+
+- name: Setup core user
+  become: true
+  become_user: postgres
+  postgresql_user:
+    name: "{{ username }}"
+    role_attr_flags: SUPERUSER,CREATEDB,CREATEROLE
+
+- name: Setup database for user
+  become: true
+  become_user: postgres
+  postgresql_db:
+    name: "{{ username }}"
+    owner: "{{ username }}"
+    encoding: UTF-8

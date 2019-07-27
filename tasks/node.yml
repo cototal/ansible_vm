@@ -1,0 +1,29 @@
+---
+- name: Check node sources
+  stat:
+    path: /etc/apt/sources.list.d/nodesource.list
+  register: node_source
+
+- name: Get NodeJS install script
+  get_url:
+    url: "https://deb.nodesource.com/setup_{{ node_version }}.x"
+    dest: /tmp/nodejs-install
+  when: not node_source.stat.exists
+
+- name: Make NodeJS install script executable
+  become: true
+  file:
+    path: /tmp/nodejs-install
+    mode: "+x"
+  when: not node_source.stat.exists
+
+- name: Run NodeJS install script
+  become: true
+  command: /tmp/nodejs-install
+  when: not node_source.stat.exists
+
+- name: Install node
+  become: true
+  apt:
+    name: nodejs
+    state: latest

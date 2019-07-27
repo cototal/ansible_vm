@@ -1,0 +1,23 @@
+---
+- name: Add PHP 7 PPA Repository
+  become: true
+  apt_repository:
+    repo: "ppa:ondrej/php"
+
+- name: Install PHP Packages
+  become: true
+  apt:
+    state: latest
+    name:
+      - "php{{ php_version }}-cli"
+      - "php{{ php_version }}-curl"
+      - "php{{ php_version }}-fpm"
+      - "php{{ php_version }}-intl"
+      - "php{{ php_version }}-ldap"
+      - "php{{ php_version }}-mysql"
+      - "php{{ php_version }}-cli"
+      - "php{{ php_version }}-gd"
+      - "php{{ php_version }}-mbstring"
+      - "php{{ php_version }}-xml"
+      - "php{{ php_version }}-xmlrpc"
+      - "php{{ php_version }}-sqlite3"

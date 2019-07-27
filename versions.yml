@@ -1,0 +1,7 @@
+---
+docker_compose_version: "1.24.1"
+ruby_version: "2.6.3"
+bundler_version: "1.17.3"
+ubuntu_codename: bionic
+php_version: "7.3"
+node_version: "10"

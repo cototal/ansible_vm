@@ -1,0 +1,49 @@
+---
+- name: Checkout RBenv repos
+  git:
+    repo: "{{ item.repo }}"
+    dest: "{{ item.dest }}"
+  with_items:
+    - { repo: "git://github.com/sstephenson/rbenv.git", dest: "~/.rbenv" }
+    - { repo: "git://github.com/sstephenson/ruby-build.git", dest: "~/.rbenv/plugins/ruby-build" }
+
+- name: Rbenv config in .bashrc
+  blockinfile:
+    path: ~/.bashrc
+    marker: "# {mark} RBENV CONFIG"
+    insertbefore: If not running interactively
+    block: |
+      export PATH="$HOME/.rbenv/bin:$PATH"
+      eval "$(rbenv init -)"
+      export PATH="$HOME/.rbenv/plugins/ruby-build/bin:$PATH"
+
+- name: Check available Ruby versions
+  shell: source ~/.bashrc && rbenv versions
+  args:
+    executable: /bin/bash
+  register: ruby_version_list
+
+- name: Install Ruby
+  shell: "source ~/.bashrc && rbenv install {{ ruby_version }}"
+  args:
+    executable: /bin/bash
+  when: "not ruby_version_list.stdout is search(ruby_version)"
+
+- name: Check current Ruby version
+  shell: source ~/.bashrc && ruby --version
+  args:
+    executable: /bin/bash
+  register: current_ruby
+
+- name: Set Ruby version
+  shell: "source ~/.bashrc && rbenv global {{ ruby_version }}"
+  args:
+    executable: /bin/bash
+  when: "not current_ruby.stdout is search('ruby ' + ruby_version)"
+
+- name: Prevent gem documentation from being installed local
+  lineinfile:
+    path: "~/.gemrc"
+    create: yes
+    state: present
+    line: "gem: --no-document"

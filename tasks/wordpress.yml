@@ -1,0 +1,24 @@
+---
+- name: Check for WordPress CLI
+  stat:
+    path: /usr/local/bin/wp
+  register: wordpress_cli
+
+- name: Get WordPress CLI
+  become: true
+  get_url:
+    url: https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli.phar
+    dest: /usr/local/bin/wp
+  when: not wordpress_cli.stat.exists
+
+- name: Make WordPress CLI executable
+  become: true
+  file:
+    path: /usr/local/bin/wp
+    mode: "+x"
+  when: not wordpress_cli.stat.exists
+
+- name: Update WordPress CLI
+  become: true
+  command: wp cli update
+  when: wordpress_cli.stat.exists

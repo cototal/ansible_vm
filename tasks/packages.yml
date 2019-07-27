@@ -1,0 +1,48 @@
+---
+- name: Update apt package manager
+  become: true
+  apt:
+    update_cache: yes
+
+- name: Upgrade existing packages
+  become: true
+  apt:
+    upgrade: safe
+
+- name: Install Standard Utilities
+  become: true
+  apt:
+    state: latest
+    name:
+      - ack-grep
+      - apache2
+      - build-essential
+      - curl
+      - git
+      - libcurl4-openssl-dev
+      - libffi-dev
+      - libpng-dev
+      - libreadline-dev
+      - libsqlite3-dev
+      - libssl-dev
+      - libxml2-dev
+      - libxslt1-dev
+      - libyaml-dev
+      - python-mysqldb
+      - python-openssl
+      - python-pip
+      - ruby-dev
+      - samba
+      - sqlite3
+      - tcl
+      - tmux
+      - unzip
+      - "vim-{{ vim_flavor }}"
+      - zip
+      - zlib1g-dev
+
+- name: "Set vim-{{ vim_flavor }} as editor"
+  become: true
+  alternatives:
+    name: editor
+    path: "/usr/bin/vim.{{ vim_flavor }}"

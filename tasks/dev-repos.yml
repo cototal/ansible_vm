@@ -1,0 +1,66 @@
+---
+- name: Checkout tool helper repos
+  git:
+    repo: "{{ item.repo }}"
+    dest: "{{ item.dest }}"
+  with_items:
+    - { repo: "git@github.com:cototal/dotfiles.git", dest: "~/dotfiles" }
+    - { repo: "git@github.com:cototal/my-vim.git", dest: "~/.vim" }
+
+- name: Setup symlinks
+  file:
+    src: "{{ item.src }}"
+    dest: "{{ item.dest }}"
+    state: link
+  with_items:
+    - { src: "~/.vim/.vimrc", dest: "~/.vimrc" }
+    - { src: "~/dotfiles/.bash_shared", dest: "~/.bash_shared" }
+    - { src: "~/dotfiles/.bash_rails", dest: "~/.bash_rails" }
+    - { src: "~/dotfiles/.bash_aliases", dest: "~/.bash_aliases" }
+    - { src: "~/dotfiles/.bash_docker", dest: "~/.bash_docker" }
+    - { src: "~/dotfiles/.tmux.conf", dest: "~/.tmux.conf" }
+    - { src: "~/dotfiles/.ackrc", dest: "~/.ackrc" }
+    - { src: "~/dotfiles/.gemrc", dest: "~/.gemrc" }
+    - { src: "~/dotfiles/.inputrc", dest: "~/.inputrc" }
+    - { src: "~/dotfiles/.irbrc", dest: "~/.irbrc" }
+
+- name: Make tmp directory
+  file:
+    path: ~/tmp
+    state: directory
+
+- name: Setup root symlinks
+  become: true
+  file:
+    src: "{{ item.src }}"
+    dest: "{{ item.dest }}"
+    state: link
+  with_items:
+    - { src: "/home/{{ username }}/.vim", dest: "~/.vim" }
+    - { src: "/home/{{ username }}/.vim/.vimrc", dest: "~/.vimrc" }
+    - { src: "/home/{{ username }}/dotfiles/.bash_shared", dest: "~/.bash_shared" }
+    - { src: "/home/{{ username }}/dotfiles/.bash_aliases", dest: "~/.bash_aliases" }
+    - { src: "/home/{{ username }}/dotfiles/.bash_docker", dest: "~/.bash_docker" }
+    - { src: "/home/{{ username }}/dotfiles/.tmux.conf", dest: "~/.tmux.conf" }
+    - { src: "/home/{{ username }}/dotfiles/.ackrc", dest: "~/.ackrc" }
+    - { src: "/home/{{ username }}/dotfiles/.gemrc", dest: "~/.gemrc" }
+    - { src: "/home/{{ username }}/dotfiles/.inputrc", dest: "~/.inputrc" }
+    - { src: "/home/{{ username }}/dotfiles/.irbrc", dest: "~/.irbrc" }
+
+- name: Enable .bash_shared
+  replace:
+    path: ~/.bashrc
+    regexp: "bash_aliases"
+    replace: "bash_shared"
+
+- name: Make root tmp directory
+  become: true
+  file:
+    path: ~/tmp
+    state: directory
+
+- name: Load vim bundles
+  command: ruby load_bundles.rb
+  args:
+    chdir: ~/.vim
+    creates: ~/.vim/bundle/vim-surround/README.markdown

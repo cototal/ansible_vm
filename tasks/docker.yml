@@ -1,0 +1,49 @@
+---
+# https://docs.docker.com/install/linux/docker-ce/ubuntu/
+- name: Ensure packages required for docker are installed
+  become: true
+  apt:
+    name:
+      - apt-transport-https
+      - ca-certificates
+      - curl
+      - gnupg-agent
+      - software-properties-common
+
+- name: Add docker's apt key
+  become: true
+  apt_key:
+    url: https://download.docker.com/linux/ubuntu/gpg
+    state: present
+
+- name: Add docker's apt repository
+  become: true
+  apt_repository:
+    repo: "deb [arch=amd64] https://download.docker.com/linux/ubuntu {{ ubuntu_codename }} stable"
+
+- name: Update apt package manager
+  become: true
+  apt:
+    update_cache: yes
+
+- name: Install docker packages
+  become: true
+  apt:
+    name:
+      - docker-ce
+      - docker-ce-cli
+      - containerd.io
+
+- name: Add current user to docker group
+  become: true
+  user:
+    name: "{{ username }}"
+    groups: docker
+    append: yes
+
+- name: Get docker-compose script
+  become: true
+  get_url:
+    url: "https://github.com/docker/compose/releases/download/{{ docker_compose_version }}/docker-compose-Linux-x86_64"
+    dest: /usr/local/bin/docker-compose
+    mode: 0775

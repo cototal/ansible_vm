@@ -1,0 +1,26 @@
+---
+- name: Check if composer exists
+  stat:
+    path: /usr/local/bin/composer
+  register: composer_file
+
+- name: Download Composer
+  script: ./scripts/install-composer.sh
+  when: not composer_file.stat.exists
+
+- name: Move composer globally
+  become: true
+  command: mv composer.phar /usr/local/bin/composer
+  when: not composer_file.stat.exists
+
+- name: Set permissions on composer
+  become: true
+  file:
+    path: /usr/local/bin/composer
+    mode: "a+x"
+  when: not composer_file.stat.exists
+
+- name: Self-update composer
+  become: true
+  command: composer self-update
+  when: composer_file.stat.exists
