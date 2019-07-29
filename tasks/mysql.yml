@@ -45,3 +45,25 @@
 
 - name: Remove remote root access
   command: "mysql -u root -p{{ mysql_root_pass }} -e \"DELETE FROM mysql.user WHERE User='root' AND Host NOT IN ('localhost', '127.0.0.1', '::1');\""
+
+- name: Set default character set
+  become: true
+  copy:
+    content: |
+      [client]
+      default-character-set = utf8mb4
+
+      [mysql]
+      default-character-set = utf8mb4
+
+      [mysqld]
+      character-set-server = utf8mb4
+      collation-server = utf8mb4_unicode_ci
+    dest: /etc/mysql/mysql.conf.d/mysql_character_set.cnf
+- name: Enable encrypted tables
+  become: true
+  copy:
+    content: |
+      [mysqld]
+      early-plugin-load=keyring_file.so
+    dest: /etc/mysql/mysql.conf.d/mysql_keyring_setup.cnf
