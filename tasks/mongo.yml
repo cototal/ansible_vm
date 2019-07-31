@@ -18,7 +18,7 @@
     path: "/etc/apt/sources.list.d/mongodb-org-{{ mongodb_version }}.list"
     state: present
     create: yes
-    line: "deb [ arch=amd64,arm64 ] https://repo.mongodb.org/apt/ubuntu {{ ubuntu_codename }}/mongodb-org/{{ mongodb_version }} multiverse"
+    line: "deb [ arch=amd64 ] https://repo.mongodb.org/apt/ubuntu {{ ubuntu_codename }}/mongodb-org/{{ mongodb_version }} multiverse"
   when: not mongo_source.stat.exists
 
 - name: Apt Update again
