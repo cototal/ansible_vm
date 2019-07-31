@@ -20,6 +20,7 @@
     - import_tasks: "./tasks/ruby.yml"
     - import_tasks: "./tasks/php.yml"
     - import_tasks: "./tasks/composer.yml"
+    - import_tasks: "./tasks/wordpress.yml"
     - import_tasks: "./tasks/node.yml"
     - import_tasks: "./tasks/nvm.yml"
     - import_tasks: "./tasks/dotnet.yml"
