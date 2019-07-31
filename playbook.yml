@@ -7,6 +7,10 @@
     - vault.yml
     - env.yml
   tasks:
+    - name: Set timezone to CST
+      become: true
+      timezone:
+        name: America/Chicago
     - import_tasks: "./tasks/ssh.yml"
     - import_tasks: "./tasks/packages.yml"
     - import_tasks: "./tasks/git.yml"
