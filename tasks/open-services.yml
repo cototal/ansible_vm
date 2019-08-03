@@ -25,6 +25,19 @@
     name: mongod
     state: restarted
 
+- name: Prepare remote user
+  mysql_user:
+    login_user: root
+    login_password: "{{ mysql_root_pass }}"
+    name: "{{ username }}"
+    password: "{{ mysql_user_pass }}"
+    state: present
+    priv: "*.*:ALL"
+    host: "{{ item }}"
+  with_items:
+    - localhost
+    - "%"
+
 - name: Open mysql for remote connections
   become: true
   lineinfile:
