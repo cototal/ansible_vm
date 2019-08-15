@@ -11,13 +11,37 @@
     name:
       - "php{{ php_version }}-cli"
       - "php{{ php_version }}-curl"
+      - "php{{ php_version }}-dev"
       - "php{{ php_version }}-fpm"
+      - "php{{ php_version }}-gd"
       - "php{{ php_version }}-intl"
       - "php{{ php_version }}-ldap"
-      - "php{{ php_version }}-mysql"
-      - "php{{ php_version }}-cli"
-      - "php{{ php_version }}-gd"
       - "php{{ php_version }}-mbstring"
+      - "php{{ php_version }}-mysql"
+      - "php{{ php_version }}-sqlite3"
       - "php{{ php_version }}-xml"
       - "php{{ php_version }}-xmlrpc"
-      - "php{{ php_version }}-sqlite3"
+      - php-pear
+
+- name: Install XDebug with Pecl
+  become: true
+  pear:
+    name: pecl/xdebug
+    state: present
+
+- name: Prepare configuration file for XDebug
+  become: true
+  copy:
+    dest: "/etc/php/{{ php_version }}/mods-available/xdebug.ini"
+    content: |
+      [xdebug]
+      zend_extension="/usr/lib/php/20180731/xdebug.so"
+      xdebug.remote_enable = 1
+      xdebug.remote_autostart = 1
+
+- name: Enable XDebug config with symlink
+  become: true
+  file:
+    state: link
+    src: "/etc/php/{{ php_version }}/mods-available/xdebug.ini"
+    dest: "/etc/php/{{ php_version }}/cli/conf.d/xdebug.ini"
