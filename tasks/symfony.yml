@@ -1,0 +1,16 @@
+---
+- name: Check if symfony exists
+  stat:
+    path: /usr/local/bin/symfony
+  register: symfony_file
+
+- name: Download and run symfony install
+  shell: wget https://get.symfony.com/cli/installer -O - | bash
+  args:
+    executable: /bin/bash
+  when: not symfony_file.stat.exists
+
+- name: Move binary to global directory
+  become: true
+  command: "mv /home/{{ username }}/.symfony/bin/symfony /usr/local/bin/symfony"
+  when: not symfony_file.stat.exists

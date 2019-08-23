@@ -46,6 +46,10 @@
       tags:
         - php
         - wordpress
+    - import_tasks: "./tasks/symfony.yml"
+      tags:
+        - php
+        - symfony
     - import_tasks: "./tasks/node.yml"
       tags:
         - node
