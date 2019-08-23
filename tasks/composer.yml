@@ -24,3 +24,9 @@
   become: true
   command: composer self-update
   when: composer_file.stat.exists
+
+- name: Add global composer directory to path
+  lineinfile:
+    path: ~/.bashrc
+    insertbefore: If not running interactively
+    line: export PATH="$HOME/.config/composer/vendor/bin:$PATH"

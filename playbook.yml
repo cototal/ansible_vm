@@ -12,21 +12,62 @@
       timezone:
         name: America/Chicago
     - import_tasks: "./tasks/ssh.yml"
+      tags:
+        - core
     - import_tasks: "./tasks/packages.yml"
+      tags:
+        - core
     - import_tasks: "./tasks/git.yml"
+      tags:
+        - git
+        - core
     - import_tasks: "./tasks/dev-repos.yml"
+      tags:
+        - core
+        - git
     - import_tasks: "./tasks/docker.yml"
+      tags:
+        - docker
     - import_tasks: "./tasks/samba.yml"
+      tags:
+        - core
+        - samba
     - import_tasks: "./tasks/ruby.yml"
+      tags:
+        - ruby
     - import_tasks: "./tasks/php.yml"
+      tags:
+        - php
     - import_tasks: "./tasks/composer.yml"
+      tags:
+        - php
+        - composer
     - import_tasks: "./tasks/wordpress.yml"
+      tags:
+        - php
+        - wordpress
     - import_tasks: "./tasks/node.yml"
+      tags:
+        - node
     - import_tasks: "./tasks/nvm.yml"
+      tags:
+        - node
+        - nvm
     - import_tasks: "./tasks/dotnet.yml"
+      tags:
+        - dotnet
     - import_tasks: "./tasks/mysql.yml"
+      tags:
+        - db
+        - mysql
     - import_tasks: "./tasks/postgres.yml"
+      tags:
+        - db
+        - postgres
     - import_tasks: "./tasks/mongo.yml"
+      tags:
+        - db
+        - mongo
     #region Redis
     - name: Check for redis config
       stat:
@@ -34,5 +75,11 @@
       register: redis_conf
     - import_tasks: ./tasks/redis.yml
       when: not redis_conf.stat.exists
+      tags:
+        - db
+        - redis
     #endregion Redis
     - import_tasks: "./tasks/open-services.yml"
+      tags:
+        - open
+        - core
