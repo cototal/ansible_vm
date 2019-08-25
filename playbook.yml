@@ -60,6 +60,10 @@
     - import_tasks: "./tasks/dotnet.yml"
       tags:
         - dotnet
+    - import_tasks: "./tasks/powershell.yml"
+      tags:
+        - dotnet
+        - powershell
     - import_tasks: "./tasks/mysql.yml"
       tags:
         - db

@@ -1,0 +1,16 @@
+---
+- name: Download Microsoft repository GPG keys (for PowerShell)
+  become: true
+  apt:
+    deb: "https://packages.microsoft.com/config/ubuntu/{{ ubuntu_version }}/packages-microsoft-prod.deb"
+
+- name: Apt Update again (for PowerShell)
+  become: true
+  apt:
+    update_cache: yes
+
+- name: Install PowerShell
+  become: true
+  apt:
+    state: latest
+    name: powershell
