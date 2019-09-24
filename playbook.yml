@@ -17,6 +17,9 @@
     - import_tasks: "./tasks/packages.yml"
       tags:
         - core
+    - import_tasks: "./tasks/visudo.yml"
+      tags:
+        - core
     - import_tasks: "./tasks/git.yml"
       tags:
         - git

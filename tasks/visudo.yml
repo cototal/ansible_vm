@@ -1,0 +1,14 @@
+---
+- name: Extend timeout and allow new sessions for sudoers.
+  become: true
+  blockinfile:
+    create: yes
+    path: /etc/sudoers.d/extraconf
+    block: |
+      Defaults timestamp_timeout={{ sudo_timeout }}
+      Defaults !tty_tickets
+- name: Ensure restrictive permissions on extra sudoers file
+  become: true
+  file:
+    path: /etc/sudoers.d/extraconf
+    mode: '0440'
