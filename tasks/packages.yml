@@ -20,7 +20,9 @@
       - git
       - libcurl4-openssl-dev
       - libffi-dev
+      - libmysqlclient-dev
       - libpng-dev
+      - libpq-dev
       - libreadline-dev
       - libsqlite3-dev
       - libssl-dev
