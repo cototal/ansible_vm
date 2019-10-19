@@ -15,7 +15,6 @@
     state: latest
     name:
       - ack-grep
-      - apache2
       - build-essential
       - curl
       - git
@@ -28,11 +27,10 @@
       - libxml2-dev
       - libxslt1-dev
       - libyaml-dev
-      - python-mysqldb
-      - python-openssl
-      - python-pip
+      - python3-mysqldb
+      - python3-openssl
+      - python3-pip
       - ruby-dev
-      - samba
       - sqlite3
       - tcl
       - tmux

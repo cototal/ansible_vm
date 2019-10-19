@@ -25,7 +25,7 @@
     name:
       - postgresql-common
       - "postgresql-{{ psql_version }}"
-      - python-psycopg2
+      - python3-psycopg2
       - libpq-dev
     state: latest
 

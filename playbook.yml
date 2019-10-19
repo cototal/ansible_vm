@@ -11,6 +11,8 @@
       become: true
       timezone:
         name: America/Chicago
+      tags:
+        - core
     - import_tasks: "./tasks/ssh.yml"
       tags:
         - core
@@ -30,7 +32,6 @@
         - docker
     - import_tasks: "./tasks/samba.yml"
       tags:
-        - core
         - samba
     - import_tasks: "./tasks/ruby.yml"
       tags:
@@ -90,4 +91,3 @@
     - import_tasks: "./tasks/open-services.yml"
       tags:
         - open
-        - core
