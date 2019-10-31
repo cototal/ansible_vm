@@ -33,7 +33,6 @@
         - docker
     - import_tasks: "./tasks/samba.yml"
       tags:
-        - core
         - samba
     - import_tasks: "./tasks/ruby.yml"
       tags:
@@ -93,4 +92,3 @@
     - import_tasks: "./tasks/open-services.yml"
       tags:
         - open
-        - core
