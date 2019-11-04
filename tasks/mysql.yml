@@ -8,7 +8,7 @@
       - mysql-server
       - mysql-client
       - libmysqlclient-dev
-      - python-mysqldb
+      - python3-mysqldb
 
 # The rest of the tasks are similar to mysql_secure_installation
 - name: Check if root password is set
