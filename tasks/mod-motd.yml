@@ -1,0 +1,10 @@
+---
+- name: Disable pieces of the MOTD
+  file:
+    path: "/etc/update-motd.d/{{ item }}"
+    mode: "0644"
+  with_items:
+    - 10-help-text
+    - 50-motd-news
+    - 80-livepatch
+  ignore_errors: true
