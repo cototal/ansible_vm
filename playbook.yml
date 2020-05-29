@@ -82,6 +82,9 @@
       tags:
         - dotnet
         - powershell
+    - import_tasks: "./tasks/go.yml"
+      tags:
+        - go
     - import_tasks: "./tasks/mysql.yml"
       tags:
         - db

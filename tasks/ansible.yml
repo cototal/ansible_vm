@@ -1,0 +1,26 @@
+---
+# # I have had a problem on some Ubuntu servers, but not all.
+# # Issue described here: https://github.com/pypa/pip/issues/5366
+# # I have to believe newer versions of pip don't have this problem,
+# # but I had trouble updating pip. Ubuntu 18's python3 comes with pip version 9.
+# - name: Fix bug in pip that causes re-install to fail
+#   become: true
+#   blockinfile:
+#     path: /usr/lib/python3/dist-packages/pip/wheel.py
+#     insertbefore: '^\s+shutil.copyfile'
+#     block: |2
+#                       if os.path.exists(destfile):
+#                           os.unlink(destfile)
+
+- name: Install ansible with pip
+  pip:
+    name:
+      - ansible
+      - jmespath
+    extra_args: --user
+
+- name: Add .local/bin to path
+  lineinfile:
+    path: "~/.bashrc"
+    insertbefore: "^# If not running interactively"
+    block: export PATH=$PATH:~/.local/bin
