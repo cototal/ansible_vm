@@ -64,3 +64,13 @@
   args:
     chdir: ~/.vim
     creates: ~/.vim/bundle/vim-surround/README.markdown
+  tags:
+    - vim
+
+- name: "Set vim-{{ vim_flavor }} as the selected editor"
+  lineinfile:
+    path: ~/.bashrc
+    insertbefore: If not running interactively
+    line: "export SELECTED_EDITOR=/usr/bin/vim.{{ vim_flavor }}"
+  tags:
+    - vim

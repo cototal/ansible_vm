@@ -44,5 +44,10 @@
 - name: "Set vim-{{ vim_flavor }} as editor"
   become: true
   alternatives:
-    name: editor
+    name: "{{ item }}"
     path: "/usr/bin/vim.{{ vim_flavor }}"
+  with_items:
+    - editor
+    - vim
+  tags:
+    - vim
