@@ -12,18 +12,18 @@
     name: redis
     state: restarted
 
-- name: Open mongodb up for remote connections
-  become: true
-  lineinfile:
-    path: /etc/mongod.conf
-    regexp: "^  bindIp"
-    line: "  bindIp: 0.0.0.0"
-
-- name: Restart mongodb service
-  become: true
-  service:
-    name: mongod
-    state: restarted
+# - name: Open mongodb up for remote connections
+#   become: true
+#   lineinfile:
+#     path: /etc/mongod.conf
+#     regexp: "^  bindIp"
+#     line: "  bindIp: 0.0.0.0"
+#
+# - name: Restart mongodb service
+#   become: true
+#   service:
+#     name: mongod
+#     state: restarted
 
 - name: Prepare remote user
   mysql_user:

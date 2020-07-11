@@ -35,7 +35,7 @@
     dest: "/etc/php/{{ php_version }}/mods-available/xdebug.ini"
     content: |
       [xdebug]
-      zend_extension="/usr/lib/php/20180731/xdebug.so"
+      zend_extension="/usr/lib/php/{{ xdebug_date }}/xdebug.so"
       xdebug.remote_enable = 1
       xdebug.remote_autostart = 1
 

@@ -64,10 +64,11 @@
       tags:
         - php
         - wordpress
-    - import_tasks: "./tasks/symfony.yml"
-      tags:
-        - php
-        - symfony
+    # Symfony CLI is not needed
+    # - import_tasks: "./tasks/symfony.yml"
+    #   tags:
+    #     - php
+    #     - symfony
     - import_tasks: "./tasks/node.yml"
       tags:
         - node
@@ -78,10 +79,11 @@
     - import_tasks: "./tasks/dotnet.yml"
       tags:
         - dotnet
-    - import_tasks: "./tasks/powershell.yml"
-      tags:
-        - dotnet
-        - powershell
+    # Not available for Ubuntu 20.04 yet
+    # - import_tasks: "./tasks/powershell.yml"
+    #   tags:
+    #     - dotnet
+    #     - powershell
     - import_tasks: "./tasks/go.yml"
       tags:
         - go
@@ -93,15 +95,19 @@
       tags:
         - db
         - postgres
-    - import_tasks: "./tasks/mongo.yml"
-      tags:
-        - db
-        - mongo
+    # Not available for Ubuntu 20.04 yet
+    # - import_tasks: "./tasks/mongo.yml"
+    #   tags:
+    #     - db
+    #     - mongo
     #region Redis
     - name: Check for redis config
       stat:
         path: /etc/redis/redis.conf
       register: redis_conf
+      tags:
+        - db
+        - redis
     - import_tasks: ./tasks/redis.yml
       when: not redis_conf.stat.exists
       tags:

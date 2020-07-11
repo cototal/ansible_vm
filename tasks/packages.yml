@@ -15,7 +15,7 @@
     state: latest
     name:
       - ack-grep
-      - apache2
+      - acl
       - build-essential
       - curl
       - git
