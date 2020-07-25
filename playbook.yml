@@ -80,10 +80,10 @@
       tags:
         - dotnet
     # Not available for Ubuntu 20.04 yet
-    # - import_tasks: "./tasks/powershell.yml"
-    #   tags:
-    #     - dotnet
-    #     - powershell
+    - import_tasks: "./tasks/powershell.yml"
+      tags:
+        - dotnet
+        - powershell
     - import_tasks: "./tasks/go.yml"
       tags:
         - go
@@ -96,10 +96,10 @@
         - db
         - postgres
     # Not available for Ubuntu 20.04 yet
-    # - import_tasks: "./tasks/mongo.yml"
-    #   tags:
-    #     - db
-    #     - mongo
+    - import_tasks: "./tasks/mongo.yml"
+      tags:
+        - db
+        - mongo
     #region Redis
     - name: Check for redis config
       stat:
