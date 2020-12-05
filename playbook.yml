@@ -82,7 +82,6 @@
     # Not available for Ubuntu 20.04 yet
     - import_tasks: "./tasks/powershell.yml"
       tags:
-        - dotnet
         - powershell
     - import_tasks: "./tasks/go.yml"
       tags:

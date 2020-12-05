@@ -18,6 +18,7 @@
     - { src: "~/dotfiles/.bash_rails", dest: "~/.bash_rails" }
     - { src: "~/dotfiles/.bash_aliases", dest: "~/.bash_aliases" }
     - { src: "~/dotfiles/.bash_docker", dest: "~/.bash_docker" }
+    - { src: "~/dotfiles/.bash_php", dest: "~/.bash_php" }
     - { src: "~/dotfiles/.tmux.conf", dest: "~/.tmux.conf" }
     - { src: "~/dotfiles/.ackrc", dest: "~/.ackrc" }
     - { src: "~/dotfiles/.gemrc", dest: "~/.gemrc" }
@@ -41,6 +42,7 @@
     - { src: "/home/{{ username }}/dotfiles/.bash_shared", dest: "~/.bash_shared" }
     - { src: "/home/{{ username }}/dotfiles/.bash_aliases", dest: "~/.bash_aliases" }
     - { src: "/home/{{ username }}/dotfiles/.bash_docker", dest: "~/.bash_docker" }
+    - { src: "/home/{{ username }}/dotfiles/.bash_php", dest: "~/.bash_php" }
     - { src: "/home/{{ username }}/dotfiles/.tmux.conf", dest: "~/.tmux.conf" }
     - { src: "/home/{{ username }}/dotfiles/.ackrc", dest: "~/.ackrc" }
     - { src: "/home/{{ username }}/dotfiles/.gemrc", dest: "~/.gemrc" }

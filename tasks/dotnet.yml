@@ -26,3 +26,9 @@
     name:
       - apt-transport-https
       - "dotnet-sdk-{{ dotnet_version }}"
+
+- name: Add tools to path
+  lineinfile:
+    path: "~/.bashrc"
+    insertbefore: "^# If not running interactively"
+    line: export PATH=$PATH:~/.dotnet/tools
