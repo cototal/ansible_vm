@@ -33,6 +33,7 @@
     - import_tasks: "./tasks/packages.yml"
       tags:
         - core
+        - packages
     - import_tasks: "./tasks/visudo.yml"
       tags:
         - core
