@@ -59,7 +59,7 @@
 - name: Enable additional Pecl extensions
   become: true
   blockinfile:
-    path: "/etc/php/7.4/{{ item }}/php.ini"
+    path: "/etc/php/{{ php_version }}/{{ item }}/php.ini"
     insertbefore: "; If you wish to have an extension loaded automatically"
     block: |
       extension=redis.so

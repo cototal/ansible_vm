@@ -20,7 +20,16 @@
         value: "524288"
         reload: yes
       tags:
-        - inotify
+        - sysctl
+        - core
+    - name: Increase max map count
+      become: true
+      sysctl:
+        name: vm.max_map_count
+        value: "262144"
+        reload: yes
+      tags:
+        - sysctl
         - core
     - import_tasks: "./tasks/ssh.yml"
       tags:
@@ -65,11 +74,10 @@
       tags:
         - php
         - wordpress
-    # Symfony CLI is not needed
-    # - import_tasks: "./tasks/symfony.yml"
-    #   tags:
-    #     - php
-    #     - symfony
+    - import_tasks: "./tasks/symfony.yml"
+      tags:
+        - php
+        - symfony
     - import_tasks: "./tasks/node.yml"
       tags:
         - node
