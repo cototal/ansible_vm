@@ -34,11 +34,6 @@
     - import_tasks: "./tasks/ssh.yml"
       tags:
         - core
-    - import_tasks: "./tasks/mod-motd.yml"
-      become: true
-      tags:
-        - core
-        - motd
     - import_tasks: "./tasks/packages.yml"
       tags:
         - core

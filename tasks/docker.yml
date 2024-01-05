@@ -7,7 +7,7 @@
       - apt-transport-https
       - ca-certificates
       - curl
-      - gnupg-agent
+      - gnupg
       - software-properties-common
 
 - name: Add docker's apt key
@@ -33,6 +33,8 @@
       - docker-ce
       - docker-ce-cli
       - containerd.io
+      - docker-buildx-plugin
+      - docker-compose-plugin
 
 - name: Add current user to docker group
   become: true
@@ -40,10 +42,3 @@
     name: "{{ username }}"
     groups: docker
     append: yes
-
-- name: Get docker-compose script
-  become: true
-  get_url:
-    url: "https://github.com/docker/compose/releases/download/{{ docker_compose_version }}/docker-compose-Linux-x86_64"
-    dest: /usr/local/bin/docker-compose
-    mode: 0775
