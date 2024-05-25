@@ -1,0 +1,35 @@
+---
+- name: Ensure neovim dependencies are available
+  become: true
+  apt:
+    name:
+      - libtool
+      - libtool-bin
+      - autoconf
+      - automake
+      - cmake
+      - g++
+      - unzip
+    state: present
+    update_cache: yes
+
+- name: Download the latest Neovim release tarball
+  get_url:
+    url: https://github.com/neovim/neovim/releases/latest/download/nvim-linux64.tar.gz
+    dest: /tmp/nvim-linux64.tar.gz
+
+- name: Extract the Neovim tarball
+  unarchive:
+    src: /tmp/nvim-linux64.tar.gz
+    dest: /tmp
+    remote_src: yes
+
+- name: Copy Neovim to /usr/local
+  become: true
+  copy:
+    src: /tmp/nvim-linux64/
+    dest: /usr/local/
+    remote_src: yes
+    owner: root
+    group: root
+    mode: '0755'

@@ -49,6 +49,9 @@
       tags:
         - core
         - git
+    - import_tasks: "./tasks/neovim.yml"
+      tags:
+        - neovim
     - import_tasks: "./tasks/docker.yml"
       tags:
         - docker
