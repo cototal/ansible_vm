@@ -1,0 +1,40 @@
+---
+- name: Check for NVM script
+  stat:
+    path: ~/.nvm/nvm.sh
+  register: nvm_script
+
+- name: Get NVM install script
+  get_url:
+    url: "https://raw.githubusercontent.com/nvm-sh/nvm/{{ nvm_version }}/install.sh"
+    dest: ~/tmp/nvm-install.sh
+  when: not nvm_script.stat.exists
+
+- name: Make NVM script executable
+  file:
+    path: ~/tmp/nvm-install.sh
+    mode: "+x"
+  when: not nvm_script.stat.exists
+
+- name: Run NVM install
+  command: ~/tmp/nvm-install.sh
+  when: not nvm_script.stat.exists
+
+- name: Get NVM versions
+  shell: "source {{ nvm_path }} && nvm ls"
+  register: nvm_nodes
+  ignore_errors: true
+  args:
+    executable: /bin/bash
+
+- name: Install NVM Node
+  shell: "source {{ nvm_path }} && nvm install {{ node_current_version }}"
+  when: "not nvm_nodes.stdout is search('->\\s+' + node_current_version)"
+  args:
+    executable: /bin/bash
+
+- name: Set default node version
+  shell: "source {{ nvm_path }} && nvm alias default {{ node_current_version }}"
+  when: "not nvm_nodes.stdout is search('->\\s+' + node_current_version)"
+  args:
+    executable: /bin/bash

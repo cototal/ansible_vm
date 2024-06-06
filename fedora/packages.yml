@@ -1,0 +1,43 @@
+- name: Update dnf package manager
+  become: true
+  ansible.builtin.dnf:
+    update_cache: yes
+
+- name: Upgrade existing packages
+  become: true
+  ansible.builtin.dnf:
+    name: '*'
+    state: latest
+
+- name: Install Standard Utilities
+  become: true
+  ansible.builtin.dnf:
+    name:
+      - ack
+      - gcc
+      - curl
+      - git
+      - pcre-devel
+      - libcurl-devel
+      - libffi-devel
+      - libpng-devel
+      - readline-devel
+      # Only installs mariadb client
+      - mariadb
+      - sqlite-devel
+      - openssl-devel
+      - libxml2-devel
+      - libxslt-devel
+      - libyaml-devel
+      - python3-mysql
+      - python3-pip
+      - ruby-devel
+      - sqlite
+      - tcl
+      - tmux
+      - unzip
+      - vim-enhanced
+      - zip
+      - zlib-devel
+    state: latest
+

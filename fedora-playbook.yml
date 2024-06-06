@@ -1,0 +1,71 @@
+---
+- hosts: localhost
+  connection: local
+  vars_files:
+    - vars.yml
+    - versions.yml
+    - vault.yml
+    - env.yml
+  tasks:
+    - name: Set timezone to CST
+      become: true
+      timezone:
+        name: America/Chicago
+      tags:
+        - core
+    - name: Increase inotify watches
+      become: true
+      sysctl:
+        name: fs.inotify.max_user_watches
+        value: "524288"
+        reload: yes
+      tags:
+        - sysctl
+        - core
+    - name: Increase max map count
+      become: true
+      sysctl:
+        name: vm.max_map_count
+        value: "262144"
+        reload: yes
+      tags:
+        - sysctl
+        - core
+    - import_tasks: "./tasks/ssh.yml"
+      tags:
+        - core
+    - import_tasks: "./fedora/packages.yml"
+      tags:
+        - core
+        - packages
+    - import_tasks: "./tasks/visudo.yml"
+      tags:
+        - core
+    - import_tasks: "./tasks/git.yml"
+      tags:
+        - git
+        - core
+    - import_tasks: "./tasks/dev-repos.yml"
+      tags:
+        - core
+        - git
+    - import_tasks: "./fedora/neovim.yml"
+      tags:
+        - neovim
+    - import_tasks: "./fedora/docker.yml"
+      tags:
+        - docker
+    - import_tasks: "./fedora/node.yml"
+      tags:
+        - node
+        - nvm
+    - import_tasks: "./tasks/go.yml"
+      tags:
+        - go
+    - import_tasks: "./tasks/php.yml"
+      tags:
+        - php
+    - import_tasks: "./tasks/composer.yml"
+      tags:
+        - php
+        - composer
