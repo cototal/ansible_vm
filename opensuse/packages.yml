@@ -1,0 +1,55 @@
+---
+- name: Update zypper package manager
+  become: true
+  zypper:
+    update_cache: yes
+
+- name: Upgrade existing packages
+  become: true
+  zypper:
+    name: '*'
+    state: latest
+
+- name: Install Standard Utilities
+  become: true
+  zypper:
+    name:
+      - ack
+      - acl
+      - gcc
+      - gcc-c++
+      - curl
+      - git
+      - libpcre3-devel
+      - libcurl-devel
+      - libffi-devel
+      - libpng-devel
+      - readline-devel
+      - sqlite3-devel
+      - libopenssl-devel
+      - libxml2-devel
+      - libxslt-devel
+      - libyaml-devel
+      - python3-Mysql-python
+      - python3-pyOpenSSL
+      - python3-pip
+      - ruby-devel
+      - samba
+      - sqlite3
+      - tcl
+      - tmux
+      - unzip
+      - "vim-{{ vim_flavor }}"
+      - zip
+      - zlib-devel
+
+- name: "Set vim-{{ vim_flavor }} as editor"
+  become: true
+  alternatives:
+    name: "{{ item }}"
+    path: "/usr/bin/vim.{{ vim_flavor }}"
+  with_items:
+    - editor
+    - vim
+  tags:
+    - vim

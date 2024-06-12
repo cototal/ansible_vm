@@ -12,5 +12,5 @@
 
 - name: Move binary to global directory
   become: true
-  command: "mv /home/{{ username }}/.symfony/bin/symfony /usr/local/bin/symfony"
+  command: "mv /home/{{ username }}/.symfony5/bin/symfony /usr/local/bin/symfony"
   when: not symfony_file.stat.exists
