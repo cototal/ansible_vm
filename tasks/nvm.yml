@@ -40,6 +40,7 @@
 - name: Get NVM versions
   shell: "source {{ nvm_path }} && nvm ls"
   register: nvm_nodes
+  ignore_errors: true
   args:
     executable: /bin/bash
 

@@ -18,6 +18,7 @@
       - "php{{ php_version }}-ldap"
       - "php{{ php_version }}-mbstring"
       - "php{{ php_version }}-mysql"
+      - "php{{ php_version }}-pgsql"
       - "php{{ php_version }}-sqlite3"
       - "php{{ php_version }}-xml"
       - "php{{ php_version }}-xmlrpc"
@@ -32,6 +33,7 @@
     - pecl/xdebug
     - pecl/redis
     - pecl/oauth
+    - pecl/mongodb
   tags:
     - pecl
 
@@ -64,8 +66,10 @@
     block: |
       extension=redis.so
       extension=oauth.so
+      extension=mongodb.so
   with_items:
     - cli
     - fpm
   tags:
     - pecl
+    - phpini
