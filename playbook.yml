@@ -7,33 +7,6 @@
     - vault.yml
     - env.yml
   tasks:
-    - name: Set timezone to CST
-      become: true
-      timezone:
-        name: America/Chicago
-      tags:
-        - core
-    - name: Increase inotify watches
-      become: true
-      sysctl:
-        name: fs.inotify.max_user_watches
-        value: "524288"
-        reload: yes
-      tags:
-        - sysctl
-        - core
-    - name: Increase max map count
-      become: true
-      sysctl:
-        name: vm.max_map_count
-        value: "262144"
-        reload: yes
-      tags:
-        - sysctl
-        - core
-    - import_tasks: "./tasks/ssh.yml"
-      tags:
-        - core
     - import_tasks: "./tasks/packages.yml"
       tags:
         - core
@@ -41,6 +14,7 @@
     - import_tasks: "./tasks/visudo.yml"
       tags:
         - core
+        - visudo
     - import_tasks: "./tasks/git.yml"
       tags:
         - git
@@ -93,6 +67,9 @@
     - import_tasks: "./tasks/go.yml"
       tags:
         - go
+    - import_tasks: "./tasks/rust.yml"
+      tags:
+        - rust
     - import_tasks: "./tasks/mysql.yml"
       tags:
         - db

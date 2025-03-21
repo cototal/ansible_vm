@@ -1,0 +1,22 @@
+---
+- name: Check if Rust is already installed
+  command: "cargo --version"
+  register: rust_check
+  ignore_errors: true
+
+- name: Download rustup installer script
+  get_url:
+    url: https://sh.rustup.rs
+    dest: /tmp/rustup.sh
+    mode: '0755'
+  when: rust_check.failed
+
+- name: Install Rust using rustup
+  shell: "/tmp/rustup.sh -y"
+  when: rust_check.failed
+
+- name: Set environment variables (for non-login shells)
+  lineinfile:
+    path: "~/.bashrc"
+    line: 'export PATH="$HOME/.cargo/bin:$PATH"'
+  when: rust_check.failed

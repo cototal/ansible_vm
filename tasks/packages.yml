@@ -33,7 +33,6 @@
       - python3-openssl
       - python3-pip
       - ruby-dev
-      - samba
       - sqlite3
       - tcl
       - tmux
