@@ -4,11 +4,8 @@
   become: true
   apt:
     name:
-      - apt-transport-https
       - ca-certificates
       - curl
-      - gnupg
-      - software-properties-common
 
 - name: Create /etc/apt/keyrings directory
   become: true
@@ -24,15 +21,24 @@
     dest: /etc/apt/keyrings/docker.asc
     mode: '0644'
 
-- name: Add docker's apt repository
+- name: Add Docker repository (DEB822 format)
   become: true
-  apt_repository:
-    repo: "deb [arch=amd64 signed-by=/etc/apt/keyrings/docker.asc] https://download.docker.com/linux/ubuntu {{ ubuntu_codename }} stable"
+  deb822_repository:
+    name: docker
+    types: [deb]
+    uris: "https://download.docker.com/linux/ubuntu"
+    suites: "{{ ansible_facts['distribution_release'] }}"
+    components: [stable]
+    architectures: "{{ 'amd64' if ansible_facts['architecture'] == 'x86_64' else 'arm64' }}"
+    signed_by: /etc/apt/keyrings/docker.asc
+    state: present
+  register: docker_repo
 
 - name: Update apt package manager
   become: true
   apt:
     update_cache: yes
+  when: docker_repo.changed
 
 - name: Install docker packages
   become: true
